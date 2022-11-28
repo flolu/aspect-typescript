@@ -21,3 +21,5 @@
 
 - `bazelisk build //...` (Build everything)
 - `bazelisk run //app:bin` (Run app)
+- `bazelisk run //app:image` (Build docker image)
+- `docker run --rm -it bazel/app:image` (Run docker image)
