@@ -10,6 +10,7 @@
 - Fast compilation with SWC
 - Run tests with Jest
 - Build Docker image from app
+- Deploy app to Kubernetes cluster
 
 # Usage
 
@@ -32,3 +33,4 @@
 - `bazelisk run //app:bin` (Run app)
 - `bazelisk run //app:image` (Build docker image)
 - `docker run --rm -it -p 3000:3000 bazel/app:image` (Run docker image)
+- `bazelisk run //:kubernetes.apply` (Deploy app to Kubernetes cluster)

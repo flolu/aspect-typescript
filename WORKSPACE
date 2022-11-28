@@ -109,6 +109,23 @@ load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
 
 ###
+# Setup rules_go
+# https://github.com/bazelbuild/rules_go/releases
+# https://github.com/bazelbuild/rules_docker/pull/2035
+###
+http_archive(
+    name = "io_bazel_rules_go",
+    sha256 = "099a9fb96a376ccbbb7d291ed4ecbdfd42f6bc822ab77ae6f1b5cb9e914e94fa",
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip"],
+)
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+go_rules_dependencies()
+
+go_register_toolchains(version = "1.19.3")
+
+###
 # Setup rules_docker
 # https://github.com/bazelbuild/rules_docker/releases
 ###
@@ -134,4 +151,26 @@ container_pull(
     digest = "sha256:9a67b70d0ba1d7c7690f917eedd8d24974dd8fd493205368b1e555a90c954208",
     registry = "docker.io",
     repository = "debian",
+)
+
+###
+# Setup rules_k8s
+# https://github.com/bazelbuild/rules_k8s/releases
+###
+http_archive(
+    name = "io_bazel_rules_k8s",
+    sha256 = "ce5b9bc0926681e2e7f2147b49096f143e6cbc783e71bc1d4f36ca76b00e6f4a",
+    strip_prefix = "rules_k8s-0.7",
+    urls = ["https://github.com/bazelbuild/rules_k8s/archive/refs/tags/v0.7.tar.gz"],
+)
+
+load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_defaults", "k8s_repositories")
+
+k8s_repositories()
+
+k8s_defaults(
+    name = "k8s_deploy",
+    cluster = "gke_ies-3d-designer_europe-west3-a_cluster",
+    image_chroot = "eu.gcr.io/ies-3d-designer",
+    kind = "deployment",
 )

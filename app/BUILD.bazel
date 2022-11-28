@@ -5,6 +5,8 @@ load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//container:layer.bzl", "container_layer")
 load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
+load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
+load("@io_bazel_rules_k8s//k8s:objects.bzl", "k8s_objects")
 load("//:js_image_layer.bzl", "js_image_layer")
 
 ts_project(
@@ -41,6 +43,7 @@ ts_project(
     deps = [
         ":app",
         "//:node_modules/@types/jest",
+        "//:node_modules/@types/supertest",
         "//:node_modules/supertest",
     ],
 )
@@ -85,4 +88,17 @@ container_image(
         ":app_layer",
         ":node_modules_layer",
     ],
+    stamp = "@io_bazel_rules_docker//stamp:always",
+)
+
+k8s_deploy(
+    name = "app_deployment",
+    images = {"app:latest": "image"},
+    template = "app.yaml",
+)
+
+k8s_objects(
+    name = "kubernetes",
+    objects = ["app_deployment"],
+    visibility = ["//visibility:public"],
 )

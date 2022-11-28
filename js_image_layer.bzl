@@ -1,4 +1,5 @@
 "contains container helper functions for js_binary"
+# https://github.com/aspect-build/rules_js/tree/main/e2e/js_image
 
 load("@rules_pkg//:providers.bzl", "PackageFilegroupInfo", "PackageFilesInfo", "PackageSymlinkInfo")
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
