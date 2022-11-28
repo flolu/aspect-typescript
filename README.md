@@ -9,8 +9,9 @@
 
 - Linux
 - Node.js
-- pnpm
-- Bazelisk
+- pnpm (`npm install -g pnpm`)
+- Bazelisk (`npm install -g @bazel/bazelisk`)
+- Buildifier (`npm install -g @bazel/buildifier`)
 
 **Setup**
 
