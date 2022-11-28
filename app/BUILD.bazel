@@ -14,6 +14,8 @@ ts_project(
         swc,
         swcrc = "//:swcrc",
     ),
+    tsconfig = "//:tsconfig",
+    composite = True,
     deps = [
         # Two dependencies are linked from first-party code in this repo
         # by the npm_link_package calls in /examples/BUILD.bazel

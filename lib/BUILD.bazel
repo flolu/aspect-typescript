@@ -5,6 +5,8 @@ ts_project(
     name = "lib_project",
     srcs = ["index.ts"],
     declaration = True,
+    composite = True,
+    tsconfig = "//:tsconfig",
 )
 
 npm_package(

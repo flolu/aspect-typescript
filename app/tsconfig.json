@@ -1,5 +1,5 @@
+// For IDE intellisense only
 {
-  "compilerOptions": {
-    "declaration": true
-  }
+  "extends": "../tsconfig.json",
+  "references": [{ "path": "../lib" }]
 }
