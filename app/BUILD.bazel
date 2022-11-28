@@ -1,0 +1,37 @@
+load("@aspect_rules_swc//swc:defs.bzl", "swc")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@bazel_skylib//lib:partial.bzl", "partial")
+
+ts_project(
+    name = "app",
+    srcs = ["main.ts"],
+    declaration = True,
+    # "." is the same as default
+    # explicitly given as a regression test for https://github.com/aspect-build/rules_ts/issues/195
+    out_dir = ".",
+    transpiler = partial.make(
+        swc,
+        swcrc = "//:swcrc",
+    ),
+    deps = [
+        # Two dependencies are linked from first-party code in this repo
+        # by the npm_link_package calls in /examples/BUILD.bazel
+        "//:node_modules/@org/lib",
+
+        # Two dependencies are linked from third-party npm packages
+        # by the npm_link_all_packages call in /examples/BUILD.bazel
+        "//:node_modules/@types/node",
+    ],
+)
+
+js_binary(
+    name = "bin",
+    data = [
+        ":app",
+
+        # Added by swc during transpilation and used at runtime
+        "//:node_modules/regenerator-runtime",
+    ],
+    entry_point = "main.js",
+)

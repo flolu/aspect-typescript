@@ -1,0 +1,15 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_js//npm:defs.bzl", "npm_package")
+
+ts_project(
+    name = "lib_project",
+    srcs = ["index.ts"],
+    declaration = True,
+)
+
+npm_package(
+    name = "lib",
+    srcs = [":lib_project"],
+    package = "@org/lib",
+    visibility = ["//:__subpackages__"],
+)

@@ -1,33 +1,17 @@
-load("@aspect_rules_swc//swc:defs.bzl", "swc")
-load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
-load("@aspect_rules_js//js:defs.bzl", "js_binary")
-load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@aspect_rules_js//npm:defs.bzl", "npm_link_package")
+load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
+
+package(default_visibility = ["//visibility:public"])
+
+npm_link_package(
+    name = "node_modules/@org/lib",
+    src = "//lib",
+)
 
 npm_link_all_packages(name = "node_modules")
 
-ts_project(
-    name = "swc",
-    srcs = [
-        "src/main.ts",
-    ],
-    declaration = True,
-    transpiler = partial.make(
-        swc,
-        swcrc = ".swcrc",
-    ),
-    deps = [
-        ":node_modules/@types/node",
-    ],
-)
-
-js_binary(
-    name = "bin",
-    data = [
-        ":swc",
-
-        # Added by swc during transpilation and used at runtime
-        ":node_modules/regenerator-runtime",
-    ],
-    entry_point = "src/main.js",
+copy_to_bin(
+    name = "swcrc",
+    srcs = [".swcrc"],
 )
