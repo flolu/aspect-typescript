@@ -1,9 +1,9 @@
 import {number} from '@org/lib'
+import * as request from 'supertest'
 
-import {main} from './main'
+import app from './app'
 
-test("should print the answer to everything", () => {
-  const log = jest.spyOn(console, "log").mockImplementation(() => {});
-  main();
-  expect(log).toBeCalledWith({ number });
-});
+test('should return the answer to everything', async () => {
+  const res = await request(app).get('/')
+  expect(res.body).toEqual({number})
+})

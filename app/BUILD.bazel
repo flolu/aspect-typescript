@@ -9,7 +9,10 @@ load("//:js_image_layer.bzl", "js_image_layer")
 
 ts_project(
     name = "app",
-    srcs = ["main.ts"],
+    srcs = glob(
+        include = ["*.ts"],
+        exclude = ["*.test.ts"],
+    ),
     composite = True,
     declaration = True,
     transpiler = partial.make(
@@ -19,19 +22,26 @@ ts_project(
     tsconfig = "//:tsconfig",
     deps = [
         "//:node_modules/@org/lib",
+        "//:node_modules/@types/express",
         "//:node_modules/@types/node",
+        "//:node_modules/express",
     ],
 )
 
 ts_project(
     name = "app_test",
-    srcs = ["main.test.ts"],
+    srcs = glob(["*.test.ts"]),
     composite = True,
     declaration = True,
+    transpiler = partial.make(
+        swc,
+        swcrc = "//:swcrc",
+    ),
     tsconfig = "//:tsconfig",
     deps = [
         ":app",
         "//:node_modules/@types/jest",
+        "//:node_modules/supertest",
     ],
 )
 

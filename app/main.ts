@@ -1,7 +1,3 @@
-import {number} from '@org/lib'
+import app from './app'
 
-export function main() {
-  console.log({ number });
-}
-
-main();
+app.listen(3000, () => console.log('http://localhost:3000'))
