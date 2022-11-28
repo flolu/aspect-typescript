@@ -4,6 +4,7 @@ load("@aspect_rules_js//js:defs.bzl", "js_binary")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//container:layer.bzl", "container_layer")
+load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
 load("//:js_image_layer.bzl", "js_image_layer")
 
 ts_project(
@@ -20,6 +21,24 @@ ts_project(
         "//:node_modules/@org/lib",
         "//:node_modules/@types/node",
     ],
+)
+
+ts_project(
+    name = "app_test",
+    srcs = ["main.test.ts"],
+    composite = True,
+    declaration = True,
+    tsconfig = "//:tsconfig",
+    deps = [
+        ":app",
+        "//:node_modules/@types/jest",
+    ],
+)
+
+jest_test(
+    name = "test",
+    config = "//:jest.config.js",
+    data = [":app_test"],
 )
 
 js_binary(

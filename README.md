@@ -1,7 +1,15 @@
 <div align="center">
-  <h1>rules_ts</h1>
-  <p>Trying out Bazel rules for TypeScript by Aspect</p>
+  <h1>🌿 aspect-typescript</h1>
+  <p>Minimal example of Bazel rules for TypeScript</p>
 </div>
+
+# Features
+
+- Import internal dependencies with `@org/`
+- Intellisense for VSCode
+- Fast compilation with SWC
+- Run tests with Jest
+- Build Docker image from app
 
 # Usage
 
@@ -20,6 +28,7 @@
 **Commands**
 
 - `bazelisk build //...` (Build everything)
+- `bazelisk test //...` (Test everything)
 - `bazelisk run //app:bin` (Run app)
 - `bazelisk run //app:image` (Build docker image)
 - `docker run --rm -it bazel/app:image` (Run docker image)

@@ -1,6 +1,7 @@
 {
   "name": "aspect-typescript",
   "devDependencies": {
+    "@types/jest": "^29.2.3",
     "@types/node": "18.11.9",
     "typescript": "4.9.3"
   }

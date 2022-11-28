@@ -2,6 +2,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 ###
 # Setup rules_js
+# https://github.com/aspect-build/rules_js/releases
 ###
 http_archive(
     name = "aspect_rules_js",
@@ -35,6 +36,7 @@ npm_repositories()
 
 ###
 # Setup rules_ts
+# https://github.com/aspect-build/rules_ts/releases
 ###
 http_archive(
     name = "aspect_rules_ts",
@@ -49,6 +51,7 @@ rules_ts_dependencies(ts_version_from = "//:package.json")
 
 ###
 # Setup rules_swc
+# https://github.com/aspect-build/rules_swc/releases
 ###
 http_archive(
     name = "aspect_rules_swc",
@@ -69,15 +72,32 @@ swc_register_toolchains(
 )
 
 ###
-# Setup rules_pkg
+# Setup rules_jest
+# https://github.com/aspect-build/rules_jest/releases
 ###
 http_archive(
-    name = "rules_python",
-    sha256 = "a868059c8c6dd6ad45a205cca04084c652cfe1852e6df2d5aca036f6e5438380",
-    strip_prefix = "rules_python-0.14.0",
-    url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.14.0.tar.gz",
+    name = "aspect_rules_jest",
+    sha256 = "dd596891aa893048d2e8d210fce214459df33d454bf0e77906ebbfaee38f2bbc",
+    strip_prefix = "rules_jest-0.12.1",
+    url = "https://github.com/aspect-build/rules_jest/archive/refs/tags/v0.12.1.tar.gz",
 )
 
+load("@aspect_rules_jest//jest:dependencies.bzl", "rules_jest_dependencies")
+
+rules_jest_dependencies()
+
+load("@aspect_rules_jest//jest:repositories.bzl", "jest_repositories")
+
+jest_repositories(name = "jest")
+
+load("@jest//:npm_repositories.bzl", jest_npm_repositories = "npm_repositories")
+
+jest_npm_repositories()
+
+###
+# Setup rules_pkg
+# https://github.com/bazelbuild/rules_pkg/releases
+###
 http_archive(
     name = "rules_pkg",
     sha256 = "eea0f59c28a9241156a47d7a8e32db9122f3d50b505fae0f33de6ce4d9b61834",
@@ -90,24 +110,8 @@ rules_pkg_dependencies()
 
 ###
 # Setup rules_docker
-# rules_docker does not work with M1 macs due to ancient rules_go version.
+# https://github.com/bazelbuild/rules_docker/releases
 ###
-
-# WORKAROUND START
-# See: https://github.com/bazelbuild/rules_docker/pull/2035
-http_archive(
-    name = "io_bazel_rules_go",
-    sha256 = "099a9fb96a376ccbbb7d291ed4ecbdfd42f6bc822ab77ae6f1b5cb9e914e94fa",
-    urls = ["https://github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip"],
-)
-
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-
-go_rules_dependencies()
-
-go_register_toolchains(version = "1.19.3")
-# WORKAROUND END
-
 http_archive(
     name = "io_bazel_rules_docker",
     sha256 = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf",

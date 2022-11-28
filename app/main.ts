@@ -1,3 +1,7 @@
 import {number} from '@org/lib'
 
-console.log("Hello world", { number });
+export function main() {
+  console.log({ number });
+}
+
+main();

@@ -20,4 +20,6 @@ copy_to_bin(
     srcs = [".swcrc"],
 )
 
+exports_files(srcs = ["jest.config.js"])
+
 npm_link_all_packages(name = "node_modules")
