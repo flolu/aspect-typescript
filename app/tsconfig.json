@@ -1,5 +1,0 @@
-// For IDE intellisense only
-{
-  "extends": "../tsconfig.json",
-  "references": [{ "path": "../lib" }]
-}

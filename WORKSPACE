@@ -6,26 +6,27 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 ###
 http_archive(
     name = "aspect_rules_js",
-    sha256 = "f58d7be1bb0e4b7edb7a0085f969900345f5914e4e647b4f0d2650d5252aa87d",
-    strip_prefix = "rules_js-1.8.0",
-    url = "https://github.com/aspect-build/rules_js/archive/refs/tags/v1.8.0.tar.gz",
+    sha256 = "9fadde0ae6e0101755b8aedabf7d80b166491a8de297c60f6a5179cd0d0fea58",
+    strip_prefix = "rules_js-1.20.0",
+    url = "https://github.com/aspect-build/rules_js/releases/download/v1.20.0/rules_js-v1.20.0.tar.gz",
 )
 
 load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 
 rules_js_dependencies()
 
-load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains")
+load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
 
 nodejs_register_toolchains(
     name = "nodejs",
-    node_version = "16.9.0",
+    node_version = DEFAULT_NODE_VERSION,
 )
 
 load("@aspect_rules_js//npm:npm_import.bzl", "npm_translate_lock")
 
 npm_translate_lock(
     name = "npm",
+    npmrc = "@//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
 )
@@ -40,9 +41,9 @@ npm_repositories()
 ###
 http_archive(
     name = "aspect_rules_ts",
-    sha256 = "5b501313118b06093497b6429f124b973f99d1eb5a27a1cc372e5d6836360e9d",
-    strip_prefix = "rules_ts-1.0.2",
-    url = "https://github.com/aspect-build/rules_ts/archive/refs/tags/v1.0.2.tar.gz",
+    sha256 = "db77d904284d21121ae63dbaaadfd8c75ff6d21ad229f92038b415c1ad5019cc",
+    strip_prefix = "rules_ts-1.3.0",
+    url = "https://github.com/aspect-build/rules_ts/releases/download/v1.3.0/rules_ts-v1.3.0.tar.gz",
 )
 
 load("@aspect_rules_ts//ts:repositories.bzl", "rules_ts_dependencies")
@@ -55,9 +56,9 @@ rules_ts_dependencies(ts_version_from = "//:package.json")
 ###
 http_archive(
     name = "aspect_rules_swc",
-    sha256 = "ad8e15e7714637b09a2e14e8ed3794b4de00e1da29259f93828c5bc80debb36b",
-    strip_prefix = "rules_swc-0.19.3",
-    url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v0.19.3.tar.gz",
+    sha256 = "5d13b0123d91d4297f60d8da0ab5771615f6ad6829bdfe69e7dcda9e5c01bc54",
+    strip_prefix = "rules_swc-1.0.0-rc0",
+    url = "https://github.com/aspect-build/rules_swc/archive/refs/tags/v1.0.0-rc0.tar.gz",
 )
 
 load("@aspect_rules_swc//swc:dependencies.bzl", "rules_swc_dependencies")
@@ -77,9 +78,9 @@ swc_register_toolchains(
 ###
 http_archive(
     name = "aspect_rules_jest",
-    sha256 = "dd596891aa893048d2e8d210fce214459df33d454bf0e77906ebbfaee38f2bbc",
-    strip_prefix = "rules_jest-0.12.1",
-    url = "https://github.com/aspect-build/rules_jest/archive/refs/tags/v0.12.1.tar.gz",
+    sha256 = "fa103b278137738ef08fd23d3c8c9157897a7159af2aa22714bc71680da58583",
+    strip_prefix = "rules_jest-0.16.1",
+    url = "https://github.com/aspect-build/rules_jest/releases/download/v0.16.1/rules_jest-v0.16.1.tar.gz",
 )
 
 load("@aspect_rules_jest//jest:dependencies.bzl", "rules_jest_dependencies")
@@ -100,30 +101,13 @@ jest_npm_repositories()
 ###
 http_archive(
     name = "rules_pkg",
-    sha256 = "eea0f59c28a9241156a47d7a8e32db9122f3d50b505fae0f33de6ce4d9b61834",
-    urls = ["https://github.com/bazelbuild/rules_pkg/releases/download/0.8.0/rules_pkg-0.8.0.tar.gz"],
+    sha256 = "8c20f74bca25d2d442b327ae26768c02cf3c99e93fad0381f32be9aab1967675",
+    urls = ["https://github.com/bazelbuild/rules_pkg/releases/download/0.8.1/rules_pkg-0.8.1.tar.gz"],
 )
 
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
-
-###
-# Setup rules_go
-# https://github.com/bazelbuild/rules_go/releases
-# https://github.com/bazelbuild/rules_docker/pull/2035
-###
-http_archive(
-    name = "io_bazel_rules_go",
-    sha256 = "099a9fb96a376ccbbb7d291ed4ecbdfd42f6bc822ab77ae6f1b5cb9e914e94fa",
-    urls = ["https://github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip"],
-)
-
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-
-go_rules_dependencies()
-
-go_register_toolchains(version = "1.19.3")
 
 ###
 # Setup rules_docker
