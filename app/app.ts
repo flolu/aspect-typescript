@@ -14,4 +14,4 @@ app.get('/', (_req, res) => {
  * https://github.com/aspect-build/rules_ts/issues/159
  * https://github.com/microsoft/TypeScript/issues/42873
  */
-export default app as any
+export default app
