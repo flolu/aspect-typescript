@@ -1,13 +1,12 @@
 load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
-load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_image_layer")
 load("@bazel_skylib//lib:partial.bzl", "partial")
 load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//container:layer.bzl", "container_layer")
 load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 load("@io_bazel_rules_k8s//k8s:objects.bzl", "k8s_objects")
-load("//:js_image_layer.bzl", "js_image_layer")
 
 ts_project(
     name = "app",
@@ -53,34 +52,48 @@ jest_test(
 )
 
 js_binary(
-    name = "bin",
+    name = "main",
     data = [":app"],
     entry_point = "main.js",
 )
 
+# https://github.com/aspect-build/rules_js/blob/main/docs/js_image_layer.md
 js_image_layer(
     name = "layers",
-    binary = ":bin",
+    binary = ":main",
     root = "/app",
     tags = [],
+    visibility = ["//visibility:__pkg__"],
+)
+
+filegroup(
+    name = "app_tar",
+    srcs = [":layers"],
+    output_group = "app",
 )
 
 container_layer(
     name = "app_layer",
-    tars = [":layers/app.tar"],
+    tars = [":app_tar"],
+)
+
+filegroup(
+    name = "node_modules_tar",
+    srcs = [":layers"],
+    output_group = "node_modules",
 )
 
 container_layer(
     name = "node_modules_layer",
-    tars = [":layers/node_modules.tar"],
+    tars = [":node_modules_tar"],
 )
 
 container_image(
     name = "image",
     architecture = "amd64",
     base = "@debian_amd64//image",
-    # /{root of js_image_layer}/{package_name()}/{name of js_binary}.sh
-    cmd = ["/app/app/bin.sh"],
+    # /{root of js_image_layer}/{package_name()}/{name of js_binary}
+    cmd = ["/app/app/bin"],
     entrypoint = ["bash"],
     layers = [
         ":app_layer",
