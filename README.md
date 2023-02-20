@@ -11,6 +11,7 @@
 - Run tests with Jest
 - Build Docker image from app
 - Deploy app to Kubernetes cluster
+- Run tests in GitHub Action
 
 # Usage
 
