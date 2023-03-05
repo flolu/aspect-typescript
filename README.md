@@ -29,9 +29,11 @@
 
 **Commands**
 
-- `bazelisk build ...` (Build everything)
-- `bazelisk test ...` (Test everything)
-- `bazelisk run //app:bin` (Run app)
-- `bazelisk run //app:image` (Build docker image)
+<!-- TODO bazel build ... works with bash but not with zsh -->
+
+- `bazel build //...` (Build everything)
+- `bazel test //...` (Test everything)
+- `bazel run //app:bin` (Run app)
+- `bazel run //app:image` (Build docker image)
 - `docker run --rm -it -p 3000:3000 bazel/app:image` (Run docker image)
-- `bazelisk run //:kubernetes.apply` (Deploy app to Kubernetes cluster)
+- `bazel run //:kubernetes.apply` (Deploy app to Kubernetes cluster)
