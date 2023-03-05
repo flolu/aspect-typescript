@@ -1,11 +1,17 @@
 name: test
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: bazelbuild/setup-bazelisk@v2
-      - run: npm install
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7
+          run_install: false
+      - run: pnpm i
       - run: bazel build //...
       - run: bazel test //...
